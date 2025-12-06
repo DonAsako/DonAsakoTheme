@@ -24,19 +24,17 @@
         </div>
     </section>
 
+    {% if projects %}
     <section class="about-section">
         <h2>Projects</h2>
         <div class="projects">
-            <div class="project-card">
-                <h3>Eskoz</h3>
-                <p>A Django-based multilingual blog platform designed for security researchers, featuring writeup management, CVE tracking, and certification showcase.</p>
-            </div>
-            <div class="project-card">
-                <h3>CSSinj</h3>
-                <p>A security tool that exploits CSS injection vulnerabilities to exfiltrate sensitive information from web applications through covert CSS channels.</p>
-            </div>
+            {% for project in projects %}
+            {% include 'components/project_card.html' with project=project %}
+            {% endfor %}
         </div>
     </section>
+    {% endif %}
+
 
     <section class="about-section">
         <h2>Links</h2>
@@ -48,12 +46,23 @@
         </div>
     </section>
 
-    {% if recent_articles %}
+    {% if articles %}
     <section class="about-section">
         <h2>Recent Articles</h2>
         <div class="articles-grid">
-            {% for article in recent_articles %}
+            {% for article in articles %}
             {% include 'components/article_card.html' with article=article %}
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if writeups %}
+    <section class="about-section">
+        <h2>Recent Writeups</h2>
+        <div class="articles-grid">
+            {% for writeup in writeups %}
+            {% include 'components/writeup_card.html' with article=writeup %}
             {% endfor %}
         </div>
     </section>

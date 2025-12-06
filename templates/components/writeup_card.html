@@ -1,0 +1,21 @@
+<a class="article_card" href="{% url 'infosec:writeup_detail' writeup.category.slug writeup.slug %}">
+    <div class="article_card--top">
+        <p class="article_card--title">{{ writeup.get_translation.title }}</p>
+        {% if writeup.category %}
+        <span class="article_card--category">{{ writeup.category }}</span>
+        {% endif %}
+    </div>
+    {% if writeup.get_translation.description %}
+    <p class="article_card--description">{{ writeup.get_translation.description }}</p>
+    {% endif %}
+    <div class="article_card--bottom">
+        <span class="article_card--date">{{ writeup.published_on|date:"M j, Y" }}</span>
+        {% if writeup.tags.all %}
+        <div class="article_card--tags">
+            {% for tag in writeup.tags.all %}
+            <span class="article_card--tag">{{ tag.title }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</a>
