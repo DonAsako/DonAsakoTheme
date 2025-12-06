@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - {{ course.title }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="breadcrumb">
+        <a href="{% url 'education:course_list' %}">{% trans 'Courses' %}</a>
+        <span class="breadcrumb-separator">/</span>
+        <span>{{ course.title }}</span>
+    </div>
+    <div class="page-header">
+        <h1>{{ course.title }}</h1>
+        {% if course.description %}
+        <p>{{ course.description }}</p>
+        {% endif %}
+        <div class="page-meta">
+            {% if course.version %}<span>{% trans 'Version' %} {{ course.version }}</span>{% endif %}
+            {% if course.category %}<span>{{ course.category.get_translation.title }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="module-list">
+        {% if not modules %}
+        <p class="message-wrapper">{% trans 'No modules available yet.' %}</p>
+        {% else %}
+        {% for module in modules %}
+        <a class="module-item" href="{% url 'education:lesson_list' course.slug module.slug %}">
+            <div class="module-item-header">
+                <h3>{{ module.title }}</h3>
+                <span class="module-order">#{% if module.order %}{{ module.order }}{% else %}{{ forloop.counter }}{% endif %}</span>
+            </div>
+            {% if module.description %}
+            <p>{{ module.description }}</p>
+            {% endif %}
+            <div class="module-lesson-count">{{ module.lessons.count }} {% trans 'lessons' %}</div>
+        </a>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

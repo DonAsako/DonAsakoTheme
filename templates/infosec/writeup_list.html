@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - {% trans 'Writeups' %}{% endblock %}
+{% block SEO %}
+<meta property="og:type" content="website">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div
+            style="display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+            <div style="flex: 1;">
+                <h1>{% trans 'Writeups' %}</h1>
+                <p>{% trans 'Deep-dive penetration testing reports, exploit breakdowns, and tactical lessons that I keep for future recon, audits, and CTF warmups.' %}</p>
+            </div>
+            {% if categories %}
+            {% url 'infosec:writeup_list' as writeup_list_url %}
+            {% include "components/category_selector.html" with categories=categories base_url="writeups" selected_category=selected_category list_url=writeup_list_url %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="articles-grid">
+        {% if not writeups %}
+        <p class="message-wrapper">{% trans 'No writeups published yet.' %}</p>
+        {% else %}
+        {% for writeup in writeups.all|dictsortreversed:"published_on" %}
+        <a class="article_card" href="{% url 'infosec:writeup_detail' writeup.category.slug writeup.slug %}">
+            <div class="article_card--top">
+                <p class="article_card--title">{{ writeup.get_translation.title }}</p>
+                {% if writeup.category %}
+                <span class="article_card--category">{{ writeup.category }}</span>
+                {% endif %}
+            </div>
+            {% if writeup.get_translation.description %}
+            <p class="article_card--description">{{ writeup.get_translation.description }}</p>
+            {% endif %}
+            <div class="article_card--bottom">
+                <span class="article_card--date">{{ writeup.published_on|date:"M j, Y" }}</span>
+                {% if writeup.tags.all %}
+                <div class="article_card--tags">
+                    {% for tag in writeup.tags.all %}
+                    <span class="article_card--tag">{{ tag.title }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </a>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

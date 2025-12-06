@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - {% trans 'Articles' %}{% endblock %}
+{% block SEO %}
+<meta property="og:type" content="website">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; flex-wrap: wrap;">
+            <div style="flex: 1;">
+                <h1>{% trans 'Articles' %}</h1>
+                <p>{% trans 'Security research, technical writeups, and deep dives' %}</p>
+            </div>
+            {% if categories %}
+            {% url 'blog:article_list' as article_list_url %}
+            {% include "components/category_selector.html" with categories=categories base_url="articles" selected_category=selected_category list_url=article_list_url %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="articles-grid">
+        {% if not articles %}
+        <p class="message-wrapper">{% trans 'No articles published yet.' %}</p>
+        {% else %}
+        {% for article in articles.all|dictsortreversed:"published_on" %}
+        {% include 'components/article_card.html' with article=article %}
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

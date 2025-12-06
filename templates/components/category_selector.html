@@ -1,0 +1,50 @@
+{% load i18n %}
+
+<select class="category-selector" id="category-selector" data-list-url="{{ list_url }}"
+    data-base-url="{{ base_url|default:'articles' }}">
+    <option value="">{% trans 'All' %}</option>
+    {% for category in categories %}
+    {% if selected_category and selected_category.slug == category.slug %}
+    <option value="{{ category.slug }}" selected>{{ category.get_translation.title|default:category.title }}</option>
+    {% else %}
+    <option value="{{ category.slug }}">{{ category.get_translation.title|default:category.title }}</option>
+    {% endif %}
+    {% endfor %}
+</select>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const categorySelector = document.getElementById('category-selector');
+        if (!categorySelector) {
+            console.warn('Category selector not found');
+            return;
+        }
+
+        const listUrl = categorySelector.dataset.listUrl || '';
+        const baseUrl = categorySelector.dataset.baseUrl || 'articles';
+
+        console.log('Category selector initialized:', { listUrl, baseUrl });
+
+        categorySelector.addEventListener('change', function () {
+            const selectedCategory = this.value;
+            console.log('Category changed:', selectedCategory);
+
+            if (selectedCategory) {
+                // Navigate to category-specific URL: /writeups/slug/ or /articles/slug/
+                const url = `/${baseUrl}/${selectedCategory}/`;
+                console.log('Navigating to:', url);
+                window.location.href = url;
+            } else {
+                // Navigate to list page (all items)
+                if (listUrl) {
+                    console.log('Navigating to list:', listUrl);
+                    window.location.href = listUrl;
+                } else {
+                    const url = `/${baseUrl}/`;
+                    console.log('Navigating to:', url);
+                    window.location.href = url;
+                }
+            }
+        });
+    });
+</script>

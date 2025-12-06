@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - {% trans 'Certifications' %}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>{% trans 'Certifications' %}</h1>
+        <p>{% trans 'Professional security certifications and credentials' %}</p>
+    </div>
+    <div class="certifications-grid">
+        {% if not certifications %}
+        <p class="message-wrapper">{% trans 'No certifications listed yet.' %}</p>
+        {% else %}
+        {% for cert in certifications %}
+        <div class="certification-card">
+            {% if cert.picture %}<img src="{{ cert.picture.url }}" alt="{{ cert.name }}">{% endif %}
+            <h3>{{ cert.name }}</h3>
+            <p>{{ cert.issuer.name }}</p>
+            <p>{{ cert.description }}</p>
+            {% if cert.obtained_date %}<p style="color: var(--accent); font-size: 0.8rem;">{{ cert.obtained_date|date:"M Y" }}</p>{% endif %}
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

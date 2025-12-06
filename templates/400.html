@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - 400{% endblock %}
+{% block content %}
+<div class="error-page">
+    <div class="error-code">400</div>
+    <p class="error-message">{% trans 'Bad request' %}</p>
+    <a href="{% url 'core:index' %}">{% trans 'Back to home' %}</a>
+</div>
+{% endblock %}

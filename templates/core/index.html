@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block SEO %}
+<meta property="og:type" content="website">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <section class="hero">
+        {% if site_settings.logo %}
+        <div class="hero--image">
+            <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}">
+        </div>
+        {% endif %}
+        <h1>DonAsako</h1>
+        <p class="subtitle">Security Researcher & Penetration Tester</p>
+        <p>French security researcher specializing in penetration testing, vulnerability research, and CTF competitions. Breaking systems to understand how they work, writing about security findings, and sharing knowledge with the community.</p>
+    </section>
+
+    <section class="about-section">
+        <h2>About</h2>
+        <div class="name-meaning">
+            <div class="kanji"><ruby>旭<rt>あさ</rt>子<rt>こ</rt></ruby></div>
+            <p>The name combines 旭 (asa) meaning "morning sun" and 子 (ko) meaning "child" — together forming "child of the morning". Like a child at dawn, approaching each challenge with curiosity and fresh perspective.</p>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <h2>Projects</h2>
+        <div class="projects">
+            <div class="project-card">
+                <h3>Eskoz</h3>
+                <p>A Django-based multilingual blog platform designed for security researchers, featuring writeup management, CVE tracking, and certification showcase.</p>
+            </div>
+            <div class="project-card">
+                <h3>CSSinj</h3>
+                <p>A security tool that exploits CSS injection vulnerabilities to exfiltrate sensitive information from web applications through covert CSS channels.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <h2>Links</h2>
+        <div class="profiles">
+            <a href="https://www.root-me.org/DonAsako" class="profile-link" target="_blank" rel="noopener">Root-Me</a>
+            <a href="https://cryptohack.org/user/donasako/" class="profile-link" target="_blank" rel="noopener">CryptoHack</a>
+            <a href="https://app.hackthebox.com/profile/1940402" class="profile-link" target="_blank" rel="noopener">Hack The Box</a>
+            <a href="https://github.com/DonAsako" class="profile-link" target="_blank" rel="noopener">GitHub</a>
+        </div>
+    </section>
+
+    {% if recent_articles %}
+    <section class="about-section">
+        <h2>Recent Articles</h2>
+        <div class="articles-grid">
+            {% for article in recent_articles %}
+            {% include 'components/article_card.html' with article=article %}
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - {% trans 'Courses' %}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>{% trans 'Courses' %}</h1>
+        <p>{% trans 'Structured learning paths for security research' %}</p>
+    </div>
+    <div class="course-grid">
+        {% if not courses %}
+        <p class="message-wrapper">{% trans 'No courses available yet.' %}</p>
+        {% else %}
+        {% for course in courses %}
+        <a class="course-card" href="{% url 'education:module_list' course.slug %}">
+            <div class="course-card-header">
+                <h3>{{ course.title }}</h3>
+                {% if course.version %}
+                <span class="course-version">v{{ course.version }}</span>
+                {% endif %}
+            </div>
+            {% if course.description %}
+            <p>{{ course.description }}</p>
+            {% endif %}
+            <div class="course-stats">
+                <span>{{ course.modules.count }} {% trans 'modules' %}</span>
+            </div>
+        </a>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

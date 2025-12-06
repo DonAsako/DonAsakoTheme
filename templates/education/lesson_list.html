@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - {{ module.title }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="breadcrumb">
+        <a href="{% url 'education:course_list' %}">{% trans 'Courses' %}</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="{% url 'education:module_list' course.slug %}">{{ course.title }}</a>
+        <span class="breadcrumb-separator">/</span>
+        <span>{{ module.title }}</span>
+    </div>
+    <div class="page-header">
+        <h1>{{ module.title }}</h1>
+        {% if module.description %}
+        <p>{{ module.description }}</p>
+        {% endif %}
+        <div class="page-meta">
+            <span>{% trans 'Module' %} #{% if module.order %}{{ module.order }}{% else %}1{% endif %}</span>
+            <span>{{ lessons.count }} {% trans 'lessons' %}</span>
+        </div>
+    </div>
+    <div class="lesson-list">
+        {% if not lessons %}
+        <p class="message-wrapper">{% trans 'No lessons available yet.' %}</p>
+        {% else %}
+        {% for lesson in lessons %}
+        <a class="lesson-item" href="{% url 'education:lesson_detail' course.slug module.slug lesson.slug %}">
+            <span class="lesson-order">{% if lesson.order %}{{ lesson.order }}{% else %}{{ forloop.counter }}{% endif %}</span>
+            <div class="lesson-item-content">
+                <h4>{{ lesson.get_translation.title }}</h4>
+                {% if lesson.get_translation.description %}
+                <p>{{ lesson.get_translation.description }}</p>
+                {% endif %}
+            </div>
+        </a>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

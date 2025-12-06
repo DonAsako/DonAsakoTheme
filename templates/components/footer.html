@@ -1,0 +1,12 @@
+{% load i18n %}
+<div class="footer-content">
+    <div class="footer-credits">
+        {{ site_settings.footer_credits|default:"Powered with ❤️ by <a href='https: //github.com/DonAsako/eskoz'>
+            Eskoz</a> " }}
+    </div>
+    <div class="footer-links">
+        {% if site_settings.contact_email %}
+        <a href="mailto:{{ site_settings.contact_email }}">{% trans 'Contact' %}</a>
+        {% endif %}
+    </div>
+</div>

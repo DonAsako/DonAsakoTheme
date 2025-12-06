@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - {% trans 'CVEs' %}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>{% trans 'CVE Discoveries' %}</h1>
+        <p>{% trans 'Vulnerability disclosures and security advisories' %}</p>
+    </div>
+    {% if not cves %}
+    <p class="message-wrapper">{% trans 'No CVEs published yet.' %}</p>
+    {% else %}
+    {% for cve in cves %}
+    <div class="cve-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span class="cve-id">{{ cve.cve_id }}</span>
+            {% if cve.cvss_score %}
+            <span class="cve-severity {{ cve.cvss_severity|lower }}">{{ cve.cvss_score }}</span>
+            {% endif %}
+        </div>
+        <h3 style="margin-bottom: 0.5rem;">{{ cve.title }}</h3>
+        {% if cve.description %}<p style="color: var(--text-secondary);">{{ cve.description }}</p>{% endif %}
+        {% if cve.published_date %}<p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.75rem;">{{ cve.published_date|date:"M j, Y" }}</p>{% endif %}
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

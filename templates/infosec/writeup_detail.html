@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %} - {{ writeup.get_translation.title }}{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+{% with markdown_css=ACTIVE_THEME|add:"/css/markdown.css" %}
+<link rel="stylesheet" href="{% static markdown_css %}">
+{% endwith %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js" crossorigin="anonymous"></script>
+{% endblock %}
+{% block SEO %}
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="{{ writeup.published_on.isoformat }}">
+<meta property="article:modified_time" content="{{ writeup.edited_on.isoformat }}">
+{% for tag in writeup.tags.all %}<meta property="article:tag" content="{{ tag.title }}">{% endfor %}
+{% endblock %}
+{% block content %}
+<div class="article--container">
+    <div class="article--wrapper">
+        <div class="article-header">
+            <h1>{{ writeup.get_translation.title }}</h1>
+            {% if writeup.get_translation.description %}
+            <p>{{ writeup.get_translation.description }}</p>
+            {% endif %}
+            <div class="article-header-meta">
+                <div class="article-meta-item">
+                    <strong>{% trans 'Published' %}:</strong>
+                    <span>{{ writeup.published_on|date:"Y-m-d" }}</span>
+                </div>
+                {% if writeup.edited_on != writeup.published_on %}
+                <div class="article-meta-item">
+                    <strong>{% trans 'Updated' %}:</strong>
+                    <span>{{ writeup.edited_on|date:"Y-m-d" }}</span>
+                </div>
+                {% endif %}
+                {% if writeup.category %}
+                <div class="article-meta-item">
+                    <strong>{% trans 'Category' %}:</strong>
+                    <span class="article-meta-badge">{{ writeup.category }}</span>
+                </div>
+                {% endif %}
+            </div>
+            {% if writeup.tags.all %}
+            <div class="article-tags">
+                {% for tag in writeup.tags.all %}
+                <span class="article-tag">{{ tag.title }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% if writeup.picture %}
+        <div class="article--picture-wrapper">
+            <img src="{{ writeup.picture.url }}" alt="{{ writeup.get_translation.title }}">
+        </div>
+        {% endif %}
+        <div class="article--content markdown-body">
+            {{ writeup.get_translation.get_content_as_html }}
+        </div>
+    </div>
+    {% include 'components/toc.html' %}
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+hljs.highlightAll();
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "\\[", right: "\\]", display: true},
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    });
+});
+</script>
+{% endblock %}

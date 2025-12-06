@@ -1,0 +1,87 @@
+{% load i18n %}
+<aside class="toc">
+    <h3>{% trans 'On this page' %}</h3>
+    <ul id="toc-list"></ul>
+</aside>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const content = document.querySelector('.article--content');
+    const tocList = document.getElementById('toc-list');
+    const tocContainer = document.querySelector('.toc');
+    if (!content || !tocList || !tocContainer) return;
+    
+    const headings = content.querySelectorAll('h2, h3, h4');
+    if (headings.length === 0) {
+        tocContainer.style.display = 'none';
+        return;
+    }
+    
+    headings.forEach((heading, index) => {
+        if (!heading.id) {
+            const id = heading.textContent.toLowerCase()
+                .replace(/[^\w\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim();
+            heading.id = id || 'heading-' + index;
+        }
+        
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + heading.id;
+        a.textContent = heading.textContent.trim();
+        
+        if (heading.tagName === 'H3') {
+            a.style.paddingLeft = '1rem';
+            a.style.fontSize = '0.8rem';
+            a.style.opacity = '0.8';
+        } else if (heading.tagName === 'H4') {
+            a.style.paddingLeft = '1.5rem';
+            a.style.fontSize = '0.75rem';
+            a.style.opacity = '0.7';
+        }
+        
+        li.appendChild(a);
+        tocList.appendChild(li);
+    });
+    
+    // Active section highlighting
+    const observerOptions = {
+        root: null,
+        rootMargin: '-20% 0px -70% 0px',
+        threshold: 0
+    };
+    
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            const id = entry.target.id;
+            const tocLink = tocList.querySelector(`a[href="#${id}"]`);
+            if (tocLink) {
+                if (entry.isIntersecting) {
+                    tocList.querySelectorAll('a').forEach(link => link.classList.remove('active'));
+                    tocLink.classList.add('active');
+                }
+            }
+        });
+    }, observerOptions);
+    
+    headings.forEach(heading => observer.observe(heading));
+    
+    // Smooth scroll with offset for sticky navbar
+    tocList.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const target = document.getElementById(targetId);
+            if (target) {
+                const offset = 100;
+                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+});
+</script>

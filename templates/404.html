@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} - 404{% endblock %}
+{% block content %}
+<div class="error-page">
+    <div class="error-code">404</div>
+    <p class="error-message">{% trans 'Page not found' %}</p>
+    <a href="{% url 'core:index' %}">{% trans 'Back to home' %}</a>
+</div>
+{% endblock %}
