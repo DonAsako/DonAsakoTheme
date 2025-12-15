@@ -41,6 +41,11 @@
                 </li>
                 {% endif %}
             {% endif %}
+            {% if site_settings.education.is_active and site_settings.education.activate_courses_page %}
+            <li class="navbar-item">
+                <a href="{% url 'education:course_list' %}" class="navbar-item--link">{% trans 'Courses' %}</a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

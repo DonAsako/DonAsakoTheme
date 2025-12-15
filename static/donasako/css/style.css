@@ -214,6 +214,8 @@ img {
     font-size: 0.875rem;
     color: var(--text-muted);
     font-family: var(--font-mono);
+}
+.lesson-container .breadcrumb {
     margin: 0 var(--spacing);
 }
 
@@ -587,7 +589,7 @@ img {
     margin: 0 auto;
     padding: 0 var(--spacing);
     display: grid;
-    grid-template-columns: 1fr 280px;
+    grid-template-columns: 1fr auto;
     gap: 3rem;
     align-items: start;
 }
