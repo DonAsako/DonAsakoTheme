@@ -4,12 +4,15 @@
 {% block head %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js"
+    crossorigin="anonymous"></script>
 {% with markdown_css=ACTIVE_THEME|add:"/css/markdown.css" %}
 <link rel="stylesheet" href="{% static markdown_css %}">
 {% endwith %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css"
+    crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"
+    crossorigin="anonymous"></script>
 {% endblock %}
 {% block content %}
 <div class="lesson-container">
@@ -32,26 +35,29 @@
                 <div class="article-header-meta">
                     <div class="article-meta-item">
                         <strong>{% trans 'Lesson' %}:</strong>
-                        <span class="article-meta-badge">#{% if lesson.order %}{{ lesson.order }}{% else %}1{% endif %}</span>
+                        <span class="article-meta-badge">
+                            #{% if lesson.order %}{{ lesson.order }}{% else %}1{% endif %}
+                        </span>
                     </div>
                     <div class="article-meta-item">
                         <strong>{% trans 'Module' %}:</strong>
-                        <span class="article-meta-badge">#{% if module.order %}{{ module.order }}{% else %}1{% endif %}</span>
+                        <span class="article-meta-badge">
+                            #{% if module.order %}{{ module.order }}{% else %}1{% endif %}
+                        </span>
                     </div>
                     <div class="article-meta-item">
                         <strong>{% trans 'Course' %}:</strong>
                         <span>{{ course.title }}</span>
                     </div>
                     <div class="article-meta-item">
-                        <span class="reading-time">
-                            📖 {% if lesson.get_translation.get_reading_time > 0 %}{{lesson.get_translation.get_reading_time }}{% else %}< 1{% endif %} min {% trans 'read' %}
-                        </span>
+                        <span class="reading-time">📖 
+                            {% if lesson.get_translation.get_reading_time > 0 %}
+                            {{lesson.get_translation.get_reading_time }}
+                            {% else %}
+                            &lt; 1
+                            {% endif %} min {% trans 'read'%}</span>
                     </div>
                 </div>
-                <button class="mark-read-btn" id="markReadBtn" data-lesson-id="{{ lesson.slug }}">
-                    <span class="mark-read-icon">✓</span>
-                    <span class="mark-read-text">{% trans 'Mark as read' %}</span>
-                </button>
             </div>
             <div class="article--content markdown-body">
                 {{ lesson.get_translation.get_content_as_html }}
@@ -61,16 +67,19 @@
     </div>
     <div class="lesson-navigation">
         {% if prev_lesson %}
-        <a href="{% url 'education:lesson_detail' course.slug module.slug prev_lesson.slug %}" class="lesson-nav-link">
-            ← {% trans 'Previous' %}: {{ prev_lesson.get_translation.title }}
+        <a href="{% url 'education:lesson_detail' course.slug module.slug prev_lesson.slug %}" class="lesson-nav-link">←
+            {% trans 'Previous' %}
         </a>
         {% else %}
         <span class="lesson-nav-link disabled">← {% trans 'Previous' %}</span>
         {% endif %}
+        <button class="mark-read-btn" id="markReadBtn" data-lesson-id="{{ lesson.slug }}">
+            <span class="mark-read-icon">✓</span>
+            <span class="mark-read-text">{% trans 'Mark as read' %}</span>
+        </button>
         {% if next_lesson %}
-        <a href="{% url 'education:lesson_detail' course.slug module.slug next_lesson.slug %}" class="lesson-nav-link">
-            {% trans 'Next' %}: {{ next_lesson.get_translation.title }} →
-        </a>
+        <a href="{% url 'education:lesson_detail' course.slug module.slug next_lesson.slug %}"
+            class="lesson-nav-link">{% trans 'Next' %} →</a>
         {% else %}
         <span class="lesson-nav-link disabled">{% trans 'Next' %} →</span>
         {% endif %}
