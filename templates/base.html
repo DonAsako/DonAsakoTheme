@@ -70,6 +70,9 @@
         {% include "components/footer.html" %}
     </footer>
 {% endif %}
+{% with theme_js="donasako/js/script.js" %}
+<script src="{% static theme_js %}"></script>
+{% endwith %}
 {% block scripts %}{% endblock %}
 </body>
 </html>

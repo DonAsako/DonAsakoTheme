@@ -18,6 +18,7 @@
         <div class="page-meta">
             <span>{% trans 'Module' %} #{% if module.order %}{{ module.order }}{% else %}1{% endif %}</span>
             <span>{{ lessons.count }} {% trans 'lessons' %}</span>
+            <span class="lessons-progress" id="lessonsProgress"></span>
         </div>
     </div>
     <div class="lesson-list">
@@ -25,17 +26,45 @@
         <p class="message-wrapper">{% trans 'No lessons available yet.' %}</p>
         {% else %}
         {% for lesson in lessons %}
-        <a class="lesson-item" href="{% url 'education:lesson_detail' course.slug module.slug lesson.slug %}">
-            <span class="lesson-order">{% if lesson.order %}{{ lesson.order }}{% else %}{{ forloop.counter }}{% endif %}</span>
+        <a class="lesson-item" href="{% url 'education:lesson_detail' course.slug module.slug lesson.slug %}"
+            data-lesson-id="{{ lesson.slug }}">
+            <span class="lesson-order">{% if lesson.order %}{{ lesson.order }}{% else %}{{ forloop.counter }}{% endif%}</span>
             <div class="lesson-item-content">
                 <h4>{{ lesson.get_translation.title }}</h4>
                 {% if lesson.get_translation.description %}
                 <p>{{ lesson.get_translation.description }}</p>
                 {% endif %}
+                <div class="lesson-item-meta">
+                    <span class="lesson-reading-time">📖 {% if lesson.get_translation.get_reading_time > 0 %}
+                        {{ lesson.get_translation.get_reading_time }}{% else %}&lt; 1{% endif %} min</span>
+                </div>
             </div>
+            <span class="lesson-read-badge" title="{% trans 'Read' %}">✓ {% trans 'Read' %}</span>
         </a>
         {% endfor %}
         {% endif %}
     </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const readLessons = JSON.parse(localStorage.getItem('readLessons') || '[]');
+        const lessonItems = document.querySelectorAll('.lesson-item[data-lesson-id]');
+        let readCount = 0;
+
+        lessonItems.forEach(item => {
+            const lessonId = item.dataset.lessonId;
+            if (readLessons.includes(lessonId)) {
+                item.classList.add('is-read');
+                readCount++;
+            }
+        });
+
+        const progressEl = document.getElementById('lessonsProgress');
+        if (progressEl && lessonItems.length > 0) {
+            progressEl.textContent = `✓ ${readCount}/${lessonItems.length}`;
+        }
+    });
+</script>
 {% endblock %}

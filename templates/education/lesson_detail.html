@@ -42,7 +42,16 @@
                         <strong>{% trans 'Course' %}:</strong>
                         <span>{{ course.title }}</span>
                     </div>
+                    <div class="article-meta-item">
+                        <span class="reading-time">
+                            📖 {% if lesson.get_translation.get_reading_time > 0 %}{{lesson.get_translation.get_reading_time }}{% else %}< 1{% endif %} min {% trans 'read' %}
+                        </span>
+                    </div>
                 </div>
+                <button class="mark-read-btn" id="markReadBtn" data-lesson-id="{{ lesson.slug }}">
+                    <span class="mark-read-icon">✓</span>
+                    <span class="mark-read-text">{% trans 'Mark as read' %}</span>
+                </button>
             </div>
             <div class="article--content markdown-body">
                 {{ lesson.get_translation.get_content_as_html }}
@@ -70,16 +79,44 @@
 {% endblock %}
 {% block scripts %}
 <script>
-hljs.highlightAll();
-document.addEventListener("DOMContentLoaded", function() {
-    renderMathInElement(document.body, {
-        delimiters: [
-            {left: "\\[", right: "\\]", display: true},
-            {left: "$$", right: "$$", display: true},
-            {left: "$", right: "$", display: false},
-            {left: "\\(", right: "\\)", display: false}
-        ]
+    hljs.highlightAll();
+    document.addEventListener("DOMContentLoaded", function () {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "\\[", right: "\\]", display: true },
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false }
+            ]
+        });
+
+        // Mark as read functionality
+        const markReadBtn = document.getElementById('markReadBtn');
+        if (markReadBtn) {
+            const lessonId = markReadBtn.dataset.lessonId;
+            let readLessons = JSON.parse(localStorage.getItem('readLessons') || '[]');
+
+            // Check if already read
+            if (readLessons.includes(lessonId)) {
+                markReadBtn.classList.add('is-read');
+                markReadBtn.querySelector('.mark-read-text').textContent = '{% trans "Read" %}';
+            }
+
+            markReadBtn.addEventListener('click', function () {
+                if (readLessons.includes(lessonId)) {
+                    // Remove from read
+                    readLessons = readLessons.filter(id => id !== lessonId);
+                    markReadBtn.classList.remove('is-read');
+                    markReadBtn.querySelector('.mark-read-text').textContent = '{% trans "Mark as read" %}';
+                } else {
+                    // Add to read
+                    readLessons.push(lessonId);
+                    markReadBtn.classList.add('is-read');
+                    markReadBtn.querySelector('.mark-read-text').textContent = '{% trans "Read" %}';
+                }
+                localStorage.setItem('readLessons', JSON.stringify(readLessons));
+            });
+        }
     });
-});
 </script>
 {% endblock %}

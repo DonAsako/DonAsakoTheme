@@ -1,3 +1,4 @@
+{% load i18n %}
 <a class="article_card" href="{% url 'infosec:writeup_detail' writeup.category.slug writeup.slug %}">
     <div class="article_card--top">
         <p class="article_card--title">{{ writeup.get_translation.title }}</p>
@@ -9,7 +10,11 @@
     <p class="article_card--description">{{ writeup.get_translation.description }}</p>
     {% endif %}
     <div class="article_card--bottom">
-        <span class="article_card--date">{{ writeup.published_on|date:"M j, Y" }}</span>
+        <div class="article_card--meta">
+            <span class="article_card--date">{{ writeup.published_on|date:"M j, Y" }}</span>
+            <span class="article_card--reading-time">📖 {% if writeup.get_translation.get_reading_time > 0 %}
+                {{ writeup.get_translation.get_reading_time }}{% else %}< 1{% endif %} min</span>
+        </div>
         {% if writeup.tags.all %}
         <div class="article_card--tags">
             {% for tag in writeup.tags.all %}
