@@ -693,7 +693,6 @@ img {
     grid-template-columns: 1fr auto;
     gap: 3rem;
     align-items: start;
-    overflow-x: hidden;
 }
 
 .article--wrapper {
