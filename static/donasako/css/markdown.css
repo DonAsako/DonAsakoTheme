@@ -6,11 +6,11 @@
     max-width: 100%;
 }
 
-.markdown-body > *:first-child {
+.markdown-body>*:first-child {
     margin-top: 0;
 }
 
-.markdown-body > *:last-child {
+.markdown-body>*:last-child {
     margin-bottom: 0;
 }
 
@@ -104,8 +104,8 @@
     line-height: 1.8;
 }
 
-.markdown-body li > ul,
-.markdown-body li > ol {
+.markdown-body li>ul,
+.markdown-body li>ol {
     margin-top: 0.75rem;
     margin-bottom: 0;
 }
@@ -293,4 +293,165 @@
 .hljs-function,
 .hljs-class {
     color: #ef4444 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ADMONITIONS
+══════════════════════════════════════════════════════════════════ */
+
+.markdown-body .admonition {
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    border-radius: 6px;
+    border-left: 4px solid #3b82f6;
+    background: #111111;
+}
+
+.markdown-body .admonition-title {
+    display: block;
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #3b82f6;
+}
+
+.markdown-body .admonition>p:last-child {
+    margin-bottom: 0;
+}
+
+.markdown-body .admonition>pre {
+    margin: 1rem 0;
+}
+
+/* Note */
+.markdown-body .admonition.note {
+    border-left-color: #3b82f6;
+}
+
+.markdown-body .admonition.note .admonition-title {
+    color: #3b82f6;
+}
+
+/* Info */
+.markdown-body .admonition.info {
+    border-left-color: #06b6d4;
+}
+
+.markdown-body .admonition.info .admonition-title {
+    color: #06b6d4;
+}
+
+/* Tip */
+.markdown-body .admonition.tip {
+    border-left-color: #10b981;
+}
+
+.markdown-body .admonition.tip .admonition-title {
+    color: #10b981;
+}
+
+/* Success */
+.markdown-body .admonition.success {
+    border-left-color: #10b981;
+}
+
+.markdown-body .admonition.success .admonition-title {
+    color: #10b981;
+}
+
+/* Warning / Caution */
+.markdown-body .admonition.warning,
+.markdown-body .admonition.caution {
+    border-left-color: #f59e0b;
+}
+
+.markdown-body .admonition.warning .admonition-title,
+.markdown-body .admonition.caution .admonition-title {
+    color: #f59e0b;
+}
+
+/* Danger / Error */
+.markdown-body .admonition.danger,
+.markdown-body .admonition.error {
+    border-left-color: #ef4444;
+}
+
+.markdown-body .admonition.danger .admonition-title,
+.markdown-body .admonition.error .admonition-title {
+    color: #ef4444;
+}
+
+/* Example */
+.markdown-body .admonition.example {
+    border-left-color: #8b5cf6;
+}
+
+.markdown-body .admonition.example .admonition-title {
+    color: #8b5cf6;
+}
+
+/* Abstract / Summary / TLDR */
+.markdown-body .admonition.abstract,
+.markdown-body .admonition.summary,
+.markdown-body .admonition.tldr {
+    border-left-color: #14b8a6;
+}
+
+.markdown-body .admonition.abstract .admonition-title,
+.markdown-body .admonition.summary .admonition-title,
+.markdown-body .admonition.tldr .admonition-title {
+    color: #14b8a6;
+}
+
+/* Quote / Cite */
+.markdown-body .admonition.quote,
+.markdown-body .admonition.cite {
+    border-left-color: #6b7280;
+}
+
+.markdown-body .admonition.quote .admonition-title,
+.markdown-body .admonition.cite .admonition-title {
+    color: #9ca3af;
+}
+
+/* Question / FAQ / Help */
+.markdown-body .admonition.question,
+.markdown-body .admonition.faq,
+.markdown-body .admonition.help {
+    border-left-color: #ec4899;
+}
+
+.markdown-body .admonition.question .admonition-title,
+.markdown-body .admonition.faq .admonition-title,
+.markdown-body .admonition.help .admonition-title {
+    color: #ec4899;
+}
+
+/* Bug */
+.markdown-body .admonition.bug {
+    border-left-color: #f43f5e;
+}
+
+.markdown-body .admonition.bug .admonition-title {
+    color: #f43f5e;
+}
+
+/* Security */
+.markdown-body .admonition.security {
+    border-left-color: #dc2626;
+}
+
+.markdown-body .admonition.security .admonition-title {
+    color: #dc2626;
+}
+
+/* Flag / CTF */
+.markdown-body .admonition.flag,
+.markdown-body .admonition.ctf {
+    border-left-color: #eab308;
+}
+
+.markdown-body .admonition.flag .admonition-title,
+.markdown-body .admonition.ctf .admonition-title {
+    color: #eab308;
 }
