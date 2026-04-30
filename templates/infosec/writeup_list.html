@@ -10,10 +10,13 @@
                 <h1>{% trans 'Writeups' %}</h1>
                 <p>{% trans 'Deep-dive penetration testing reports, exploit breakdowns, and tactical lessons that I keep for future recon, audits, and CTF warmups.' %}</p>
             </div>
-            {% if categories %}
-            {% url 'infosec:writeup_list' as writeup_list_url %}
-            {% include "components/category_selector.html" with categories=categories base_url="writeups" selected_category=selected_category list_url=writeup_list_url %}
-            {% endif %}
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                {% include "components/per_page_selector.html" %}
+                {% if categories %}
+                {% url 'infosec:writeup_list' as writeup_list_url %}
+                {% include "components/category_selector.html" with categories=categories base_url="writeups" selected_category=selected_category list_url=writeup_list_url %}
+                {% endif %}
+            </div>
         </div>
     </div>
 
@@ -21,10 +24,11 @@
         {% if not writeups %}
         <p class="message-wrapper">{% trans 'No writeups published yet.' %}</p>
         {% else %}
-        {% for writeup in writeups.all|dictsortreversed:"published_on" %}
+        {% for writeup in writeups %}
         {% include 'components/writeup_card.html' with writeup=writeup %}
         {% endfor %}
         {% endif %}
     </div>
+    {% include "components/pagination.html" %}
 </div>
 {% endblock %}
