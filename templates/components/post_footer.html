@@ -1,0 +1,42 @@
+{% load i18n %}
+{% comment %}
+End-of-article block: See also (related posts), tag list, and edited
+timestamp. Caller passes:
+  - post                  : the Article / Writeup instance
+  - related_posts         : list of related instances (same type)
+  - related_post_url_name : URL name like "blog:article_detail" / "infosec:writeup_detail"
+{% endcomment %}
+<footer class="post-footer">
+    {% if post.tags.all %}
+    <div class="post-footer__tags">
+        <span class="post-footer__label">{% trans 'Tagged' %}</span>
+        {% for tag in post.tags.all %}<span class="article-tag">{{ tag.title }}</span>{% endfor %}
+    </div>
+    {% endif %}
+
+    <p class="post-footer__meta">
+        {% if post.published_on %}{% trans 'Published' %} <time datetime="{{ post.published_on|date:'c' }}">{{ post.published_on|date:"Y-m-d" }}</time>{% endif %}
+        {% if post.edited_on and post.edited_on != post.published_on %}
+        · {% trans 'updated' %} <time datetime="{{ post.edited_on|date:'c' }}">{{ post.edited_on|timesince }} {% trans 'ago' %}</time>
+        {% endif %}
+    </p>
+
+    {% if related_posts %}
+    <section class="post-footer__related" aria-label="{% trans 'See also' %}">
+        <h2 class="post-footer__related-title">{% trans 'See also' %}</h2>
+        <ul class="post-footer__related-list">
+            {% for r in related_posts %}
+            <li class="post-footer__related-item">
+                <a href="{% url related_post_url_name r.category.slug r.slug %}" class="post-footer__related-link">
+                    <span class="post-footer__related-link-title">{{ r.get_translation.title }}</span>
+                    <span class="post-footer__related-link-meta">
+                        {% if r.published_on %}{{ r.published_on|date:"Y-m-d" }}{% endif %}
+                        {% if r.category %} · {{ r.category }}{% endif %}
+                    </span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+</footer>

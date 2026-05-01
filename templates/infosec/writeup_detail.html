@@ -95,6 +95,7 @@
         <div class="article--content markdown-body">
             {{ writeup.get_translation.get_content_as_html }}
         </div>
+        {% include 'components/post_footer.html' with post=writeup %}
     </div>
     {% include 'components/toc.html' %}
 </div>
