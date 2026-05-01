@@ -163,5 +163,55 @@ document.addEventListener('DOMContentLoaded', function() {
         frame.appendChild(bar);
         frame.appendChild(pre);
     });
+
+    // Heading anchors. For h2-h4 inside .markdown-body, give each an
+    // ID (idempotent — leaves existing IDs alone) and prepend a
+    // `<a class="heading-anchor">#</a>`. The CSS keeps it invisible
+    // until the heading is hovered. Click copies the full URL with
+    // the fragment to the clipboard.
+    function slugify(text) {
+        return (text || '')
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
+    }
+
+    document.querySelectorAll('.markdown-body h2, .markdown-body h3, .markdown-body h4').forEach(function (h, i) {
+        if (h.querySelector('.heading-anchor')) return;
+        if (!h.id) {
+            const text = h.textContent || '';
+            h.id = slugify(text) || ('heading-' + i);
+        }
+        const a = document.createElement('a');
+        a.className = 'heading-anchor';
+        a.href = '#' + h.id;
+        a.setAttribute('aria-label', 'Permalink');
+        // No textContent: the visual "#" is rendered by the CSS ::before
+        // pseudo so it doesn't pollute heading.textContent (which the
+        // TOC reads to label its entries).
+        a.addEventListener('click', function (e) {
+            e.preventDefault();
+            const url = window.location.origin + window.location.pathname + '#' + h.id;
+            const flash = function () {
+                a.classList.add('is-copied');
+                setTimeout(function () { a.classList.remove('is-copied'); }, 1100);
+            };
+            // Update the URL hash without scroll-jumping (smooth handled by sibling listener if needed)
+            history.replaceState(null, '', '#' + h.id);
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(url).then(flash).catch(flash);
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+                document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); } catch (_) {}
+                document.body.removeChild(ta);
+                flash();
+            }
+        });
+        h.appendChild(a);
+    });
 });
 
