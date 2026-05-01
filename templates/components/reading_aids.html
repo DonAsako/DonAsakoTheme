@@ -1,0 +1,48 @@
+{% comment %}
+Reading aids for long-form pages (article / writeup / lesson detail):
+  - Top progress bar that tracks position within the article wrapper
+  - Floating "back to top" button that appears past the halfway mark
+
+Both are pure CSS+JS, no template params. Just include after content.
+{% endcomment %}
+<div class="reading-progress" aria-hidden="true">
+    <span class="reading-progress__bar"></span>
+</div>
+<button type="button" class="back-to-top" aria-label="Back to top" data-back-to-top>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <path d="M7 11.5V2.5M3 6.5L7 2.5L11 6.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+</button>
+<script>
+(function () {
+    var bar = document.querySelector(".reading-progress__bar");
+    var btn = document.querySelector("[data-back-to-top]");
+    var article = document.querySelector(".article--wrapper") || document.querySelector(".article--content");
+    if (!article || (!bar && !btn)) return;
+
+    function update() {
+        var rect = article.getBoundingClientRect();
+        var total = rect.height - window.innerHeight;
+        var read  = -rect.top;
+        var pct   = total > 0 ? Math.max(0, Math.min(1, read / total)) : 0;
+        if (bar) bar.style.transform = "scaleX(" + pct + ")";
+        if (btn) btn.classList.toggle("is-visible", pct > 0.5);
+    }
+
+    var rafId = null;
+    function onScroll() {
+        if (rafId) return;
+        rafId = requestAnimationFrame(function () { update(); rafId = null; });
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    update();
+
+    if (btn) {
+        btn.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
+})();
+</script>
