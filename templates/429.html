@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block robots %}<meta name="robots" content="noindex,nofollow">{% endblock %}
+{% block title %} - 429{% endblock %}
+{% block content %}
+<div class="error-page">
+    <div class="error-code">429</div>
+    <p class="error-message">{% trans 'Too many requests — please wait a few minutes and try again.' %}</p>
+    <a href="{% url 'core:index' %}">{% trans 'Back to home' %}</a>
+</div>
+{% endblock %}
