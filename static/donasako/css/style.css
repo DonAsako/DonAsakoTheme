@@ -694,6 +694,47 @@ img {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   ARCHIVE — year-grouped lists (articles, writeups)
+══════════════════════════════════════════════════════════════════ */
+
+.archive {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.archive__year-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    margin: 0 0 0.25rem;
+    padding: 0;
+    font-family: var(--font-mono);
+}
+
+.archive__year-label {
+    color: var(--text);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+}
+
+.archive__year-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.archive__year-count {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    text-transform: lowercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    ARTICLES GRID / CARDS
 ══════════════════════════════════════════════════════════════════ */
 

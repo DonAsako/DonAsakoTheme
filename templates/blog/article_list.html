@@ -13,7 +13,7 @@
                 <p>{% trans 'Security research, technical writeups, and deep dives' %}</p>
             </div>
             <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-                {% include "components/per_page_selector.html" %}
+                {% if page_obj %}{% include "components/per_page_selector.html" %}{% endif %}
                 {% if categories %}
                 {% url 'blog:article_list' as article_list_url %}
                 {% include "components/category_selector.html" with categories=categories base_url="articles" selected_category=selected_category list_url=article_list_url %}
@@ -21,15 +21,26 @@
             </div>
         </div>
     </div>
-    <div class="articles-grid">
-        {% if not articles %}
-        <p class="message-wrapper">{% trans 'No articles published yet.' %}</p>
-        {% else %}
-        {% for article in articles %}
-        {% include 'components/article_card.html' with article=article %}
+    {% if not article_groups %}
+    <p class="message-wrapper">{% trans 'No articles published yet.' %}</p>
+    {% else %}
+    <div class="archive">
+        {% for group in article_groups %}
+        <section class="archive__year">
+            <header class="archive__year-header">
+                <span class="archive__year-label">{{ group.year|default:_("Undated") }}</span>
+                <span class="archive__year-rule" aria-hidden="true"></span>
+                <span class="archive__year-count">{{ group.items|length }} {% if group.items|length == 1 %}{% trans 'post' %}{% else %}{% trans 'posts' %}{% endif %}</span>
+            </header>
+            <div class="articles-grid">
+                {% for article in group.items %}
+                {% include 'components/article_card.html' with article=article %}
+                {% endfor %}
+            </div>
+        </section>
         {% endfor %}
-        {% endif %}
     </div>
-    {% include "components/pagination.html" %}
+    {% endif %}
+    {% if page_obj %}{% include "components/pagination.html" %}{% endif %}
 </div>
 {% endblock %}
