@@ -188,6 +188,7 @@
     cursor: pointer;
     padding: 0.15rem 0.45rem;
     border-radius: 2px;
+    margin-left: auto; /* sticks to the right even without a lang label */
     transition: color 80ms ease, border-color 80ms ease, background-color 80ms ease;
 }
 .code-block-frame__copy:hover {

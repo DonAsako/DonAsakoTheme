@@ -42,28 +42,93 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Code block topbar: language label + copy button.
-    // Reads `language-foo` off the <code> element (set by the markdown
-    // pipeline / highlight.js), wraps the <pre> in a frame and prepends
-    // a bar. Skips already-wrapped pres so it stays idempotent.
+    //
+    // Language detection is intentionally permissive — different markdown
+    // pipelines emit different markup (codehilite drops the language
+    // entirely, fenced_code uses `language-X`, some plugins use `lang-X`,
+    // hljs auto-detect adds `language-X` after the fact, etc). We try
+    // every spot we know of, then fall back to inspecting hljs's first-token
+    // marker. If nothing is found we omit the label rather than displaying
+    // a misleading "text".
+    const LANG_ALIASES = {
+        py: 'python', js: 'javascript', ts: 'typescript', rs: 'rust',
+        sh: 'bash', shell: 'bash', zsh: 'bash',
+        'c++': 'cpp', cs: 'csharp', kt: 'kotlin', rb: 'ruby',
+        yml: 'yaml', md: 'markdown', ps1: 'powershell', ps: 'powershell',
+        dockerfile: 'docker', make: 'makefile', plaintext: '', txt: '', text: ''
+    };
+    const KNOWN_LANGS = new Set([
+        'python', 'javascript', 'typescript', 'jsx', 'tsx',
+        'bash', 'sh', 'zsh', 'fish', 'powershell', 'cmd', 'batch',
+        'c', 'cpp', 'csharp', 'java', 'kotlin', 'scala', 'groovy',
+        'go', 'rust', 'zig', 'swift', 'objectivec', 'dart',
+        'ruby', 'php', 'perl', 'lua', 'r', 'julia', 'haskell',
+        'elixir', 'erlang', 'clojure', 'fsharp', 'ocaml', 'nim', 'crystal',
+        'html', 'css', 'scss', 'sass', 'less',
+        'json', 'jsonc', 'xml', 'yaml', 'toml', 'ini', 'env',
+        'sql', 'graphql', 'protobuf', 'thrift',
+        'docker', 'dockerfile', 'makefile', 'nginx', 'apache',
+        'diff', 'patch', 'asm', 'x86asm', 'arm', 'mips',
+        'http', 'vim', 'lisp', 'scheme', 'matlab', 'verilog', 'vhdl',
+        'tex', 'latex', 'markdown'
+    ]);
+
+    function normalize(raw) {
+        if (!raw) return '';
+        const k = raw.toLowerCase();
+        if (k in LANG_ALIASES) return LANG_ALIASES[k];
+        return k;
+    }
+
+    function detectLanguage(pre, code) {
+        const sources = [code, pre, pre.parentElement].filter(Boolean);
+
+        // 1. language-X / lang-X explicit prefix
+        for (const el of sources) {
+            for (const cls of el.classList) {
+                if (cls.startsWith('language-')) return normalize(cls.slice(9));
+                if (cls.startsWith('lang-'))     return normalize(cls.slice(5));
+            }
+        }
+
+        // 2. data-language="X" (some renderers)
+        for (const el of sources) {
+            const d = el.getAttribute && el.getAttribute('data-language');
+            if (d) return normalize(d);
+        }
+
+        // 3. Bare class that matches a known language alias
+        for (const el of sources) {
+            for (const cls of el.classList) {
+                if (cls === 'hljs' || cls === 'highlight' || cls === 'codehilite') continue;
+                const norm = normalize(cls);
+                if (norm && KNOWN_LANGS.has(norm)) return norm;
+            }
+        }
+
+        return '';
+    }
+
     document.querySelectorAll('.markdown-body pre').forEach(function (pre) {
         if (pre.parentElement && pre.parentElement.classList.contains('code-block-frame')) return;
         const code = pre.querySelector('code');
         if (!code) return;
 
-        let lang = '';
-        for (const cls of code.classList) {
-            if (cls.startsWith('language-')) { lang = cls.slice(9); break; }
-        }
+        const lang = detectLanguage(pre, code);
 
         const frame = document.createElement('div');
         frame.className = 'code-block-frame';
 
         const bar = document.createElement('div');
         bar.className = 'code-block-frame__bar';
+        if (!lang) bar.classList.add('code-block-frame__bar--no-lang');
 
-        const langLabel = document.createElement('span');
-        langLabel.className = 'code-block-frame__lang';
-        langLabel.textContent = lang || 'text';
+        if (lang) {
+            const langLabel = document.createElement('span');
+            langLabel.className = 'code-block-frame__lang';
+            langLabel.textContent = lang;
+            bar.appendChild(langLabel);
+        }
 
         const copy = document.createElement('button');
         copy.type = 'button';
@@ -84,7 +149,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(text).then(done).catch(function () { /* ignore */ });
             } else {
-                // Fallback for non-secure contexts (older browsers / http).
                 const ta = document.createElement('textarea');
                 ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
                 document.body.appendChild(ta); ta.select();
@@ -93,7 +157,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        bar.appendChild(langLabel);
         bar.appendChild(copy);
 
         pre.parentNode.insertBefore(frame, pre);
