@@ -10,7 +10,7 @@ timestamp. Caller passes:
     {% if post.tags.all %}
     <div class="post-footer__tags">
         <span class="post-footer__label">{% trans 'Tagged' %}</span>
-        {% for tag in post.tags.all %}<span class="article-tag">{{ tag.title }}</span>{% endfor %}
+        {% for tag in post.tags.all %}<a class="article-tag" href="{% url 'core:tag_detail' tag.title|slugify %}">{{ tag.title }}</a>{% endfor %}
     </div>
     {% endif %}
 

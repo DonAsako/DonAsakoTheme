@@ -1285,6 +1285,42 @@ img {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   TAG PAGE — /tags/<slug>/ cross-app archive
+══════════════════════════════════════════════════════════════════ */
+
+.tag-page__eyebrow {
+    margin: 0 0 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+}
+
+.tag-page__group {
+    margin-bottom: 3rem;
+}
+
+.tag-page__group-title {
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin: 0 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.tag-page__group-count {
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-left: 0.4em;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    POST FOOTER — prev/next + tags + updated timestamp
 ══════════════════════════════════════════════════════════════════ */
 

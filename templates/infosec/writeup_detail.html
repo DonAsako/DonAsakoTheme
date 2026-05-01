@@ -82,7 +82,7 @@
             {% if writeup.tags.all %}
             <div class="article-tags">
                 {% for tag in writeup.tags.all %}
-                <span class="article-tag">{{ tag.title }}</span>
+                <a class="article-tag" href="{% url 'core:tag_detail' tag.title|slugify %}">{{ tag.title }}</a>
                 {% endfor %}
             </div>
             {% endif %}
