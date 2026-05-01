@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %} - {% trans 'Search' %}{% if query %}: {{ query }}{% endif %}{% endblock %}
+{% block robots %}<meta name="robots" content="noindex,follow">{% endblock %}
+{% block og_title %}<meta property="og:title" content="{% trans 'Search' %} | {{ site_settings.site_name }}">{% endblock %}
+{% block meta_description %}<meta name="description" content="{% trans 'Search articles, writeups and lessons across the site.' %}">{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>{% trans 'Search' %}</h1>
+        <form method="get" action="{% url 'core:search' %}" class="search-form" role="search">
+            <input type="search" name="q" value="{{ query }}" placeholder="{% trans 'Search articles, writeups, lessons…' %}" autofocus aria-label="{% trans 'Search query' %}" class="search-form__input">
+            <button type="submit" class="search-form__button">{% trans 'Search' %}</button>
+        </form>
+    </div>
+
+    {% if query %}
+        <p class="search-summary">
+            {% blocktrans count counter=total %}{{ counter }} result for "{{ query }}"{% plural %}{{ counter }} results for "{{ query }}"{% endblocktrans %}
+        </p>
+
+        {% if total == 0 %}
+            <p class="message-wrapper">{% trans 'No matching content. Try different keywords or check the spelling.' %}</p>
+        {% else %}
+            {% if results.articles %}
+                <h2 class="search-group__title">{% trans 'Articles' %} <span class="search-group__count">{{ results.articles|length }}</span></h2>
+                <div class="articles-grid">
+                    {% for hit in results.articles %}
+                        <a class="article_card" href="{% url 'blog:article_detail' hit.post.category.slug hit.post.slug %}">
+                            <div class="article_card--top">
+                                <p class="article_card--title">{{ hit.translation.title }}</p>
+                                {% if hit.post.category %}<span class="article_card--category">{{ hit.post.category }}</span>{% endif %}
+                            </div>
+                            {% if hit.translation.description %}<p class="article_card--description">{{ hit.translation.description }}</p>{% endif %}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if results.writeups %}
+                <h2 class="search-group__title">{% trans 'Writeups' %} <span class="search-group__count">{{ results.writeups|length }}</span></h2>
+                <div class="articles-grid">
+                    {% for hit in results.writeups %}
+                        <a class="article_card" href="{% url 'infosec:writeup_detail' hit.post.category.slug hit.post.slug %}">
+                            <div class="article_card--top">
+                                <p class="article_card--title">{{ hit.translation.title }}</p>
+                                {% if hit.post.category %}<span class="article_card--category">{{ hit.post.category }}</span>{% endif %}
+                            </div>
+                            {% if hit.translation.description %}<p class="article_card--description">{{ hit.translation.description }}</p>{% endif %}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if results.lessons %}
+                <h2 class="search-group__title">{% trans 'Lessons' %} <span class="search-group__count">{{ results.lessons|length }}</span></h2>
+                <div class="articles-grid">
+                    {% for hit in results.lessons %}
+                        <a class="article_card" href="{% url 'education:lesson_detail' hit.post.module.course.slug hit.post.module.slug hit.post.slug %}">
+                            <div class="article_card--top">
+                                <p class="article_card--title">{{ hit.translation.title }}</p>
+                                <span class="article_card--category">{{ hit.post.module.course }}</span>
+                            </div>
+                            {% if hit.translation.description %}<p class="article_card--description">{{ hit.translation.description }}</p>{% endif %}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
