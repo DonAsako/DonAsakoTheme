@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block title %} - {% trans 'Articles' %}{% endblock %}
+{% block og_title %}<meta property="og:title" content="{% trans 'Articles' %} | {{ site_settings.site_name }}">{% endblock %}
+{% block meta_description %}<meta name="description" content="{% trans 'Security research, technical writeups, and deep dives' %}">{% endblock %}
+{% block og_description %}<meta property="og:description" content="{% trans 'Security research, technical writeups, and deep dives' %}">{% endblock %}
 {% block content %}
 <div class="container">
     <div class="page-header">

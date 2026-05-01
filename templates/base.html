@@ -19,37 +19,63 @@
 
     {% if site_settings.favicon %}<link rel="icon" href="{{ site_settings.favicon.url }}" type="image/x-icon">{% endif %}
 
+    {% block canonical %}
+    <link rel="canonical" href="{{ CANONICAL_URL }}">
+    {% endblock %}
+
+    {% block robots %}{% endblock %}
+
+    {% if site_settings.seo_settings.google_site_verification %}
+    <meta name="google-site-verification" content="{{ site_settings.seo_settings.google_site_verification }}">
+    {% endif %}
+
     {% block og_type %}
     <meta property="og:type" content="website">
     {% endblock %}
 
     {% block og_title %}
-    <meta property="og:title" content="{{ site_settings.seo_settings.og_title }}">
+    <meta property="og:title" content="{{ site_settings.seo_settings.og_title|default:site_settings.site_name }}">
     {% endblock %}
 
     {% block og_description %}
-    <meta property="og:description" content="{{ site_settings.seo_settings.og_description }}">
+    <meta property="og:description" content="{{ site_settings.seo_settings.og_description|default:site_settings.seo_settings.meta_description }}">
     {% endblock %}
 
     {% block og_url %}
-    <meta property="og:url" content="{{ request.get_host }}">
+    <meta property="og:url" content="{{ CANONICAL_URL }}">
+    {% endblock %}
+
+    {% block og_site_name %}
+    <meta property="og:site_name" content="{{ site_settings.site_name }}">
+    {% endblock %}
+
+    {% block og_locale %}
+    <meta property="og:locale" content="{{ OG_LOCALE }}">
+    {% for alt in OG_LOCALE_ALTERNATES %}<meta property="og:locale:alternate" content="{{ alt }}">{% endfor %}
     {% endblock %}
 
     {% block meta_properties %} {% endblock %}
 
     {% block og_image %}
     {% if site_settings.seo_settings.og_image %}
-    <meta property="og:image" content="{{ site_settings.seo_settings.og_image.url }}">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site_settings.seo_settings.og_image.url }}">
+    <meta property="og:image:width" content="{{ site_settings.seo_settings.og_image.width }}">
+    <meta property="og:image:height" content="{{ site_settings.seo_settings.og_image.height }}">
     {% endif %}
     {% endblock %}
 
     {% block twitter %}
-    <meta name="twitter:card" content="{{ site_settings.seo_settings.twitter_card_type }}">
+    <meta name="twitter:card" content="{{ site_settings.seo_settings.twitter_card_type|default:'summary' }}">
     <meta name="twitter:creator" content="{{ site_settings.seo_settings.twitter_creator }}">
+    <meta name="twitter:title" content="{{ site_settings.seo_settings.twitter_title|default:site_settings.site_name }}">
+    <meta name="twitter:description" content="{{ site_settings.seo_settings.twitter_description|default:site_settings.seo_settings.meta_description }}">
+    {% if site_settings.seo_settings.twitter_image %}<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ site_settings.seo_settings.twitter_image.url }}">{% endif %}
     {% endblock %}
 
+    {% block structured_data %}{% endblock %}
+
     <title>{{ site_settings.site_name }}{% block title %}{% endblock %}</title>
-    
+
     {% with theme_css="donasako/css/style.css" %}
     <link rel="stylesheet" href="{% static theme_css %}">
     {% endwith %}
