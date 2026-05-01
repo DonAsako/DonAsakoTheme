@@ -18,19 +18,40 @@
     {% if not cves %}
     <p class="message-wrapper">{% trans 'No CVEs published yet.' %}</p>
     {% else %}
-    {% for cve in cves %}
-    <div class="cve-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-            <span class="cve-id">{{ cve.cve_id }}</span>
-            {% if cve.cvss_score %}
-            <span class="cve-severity {{ cve.cvss_severity|lower }}">{{ cve.cvss_score }}</span>
-            {% endif %}
-        </div>
-        <h3 style="margin-bottom: 0.5rem;">{{ cve.title }}</h3>
-        {% if cve.description %}<p style="color: var(--text-secondary);">{{ cve.description }}</p>{% endif %}
-        {% if cve.published_date %}<p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.75rem;">{{ cve.published_date|date:"M j, Y" }}</p>{% endif %}
+    <div class="cve-table-wrap">
+        <table class="cve-table">
+            <thead>
+                <tr>
+                    <th class="cve-table__col-id">{% trans 'CVE' %}</th>
+                    <th class="cve-table__col-score">{% trans 'CVSS' %}</th>
+                    <th class="cve-table__col-product">{% trans 'Product' %}</th>
+                    <th class="cve-table__col-date">{% trans 'Published' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cve in cves %}
+                <tr class="cve-table__row">
+                    <td class="cve-table__id">
+                        {% if cve.references_url %}
+                        <a href="{{ cve.references_url }}" target="_blank" rel="noopener nofollow">{{ cve.cve_id }}</a>
+                        {% else %}
+                        {{ cve.cve_id }}
+                        {% endif %}
+                    </td>
+                    <td class="cve-table__score">
+                        {% if cve.cvss_score %}
+                        <span class="cve-score cve-score--{{ cve.cvss_severity|lower }}">{{ cve.cvss_score }}</span>
+                        {% else %}
+                        <span class="cve-score cve-score--none">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="cve-table__product" title="{{ cve.description }}">{{ cve.vulnerable_product|default:"—" }}</td>
+                    <td class="cve-table__date">{% if cve.published_date %}{{ cve.published_date|date:"Y-m-d" }}{% else %}—{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    {% endfor %}
     {% include "components/pagination.html" %}
     {% endif %}
 </div>

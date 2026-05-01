@@ -1494,55 +1494,108 @@ img {
     margin-bottom: 0;
 }
 
-.cve-card {
-    padding: 2rem;
+/* ═══════════════════════════════════════════════════════════════
+   CVE TABLE — dense mono advisory list with CVSS-coded scores
+══════════════════════════════════════════════════════════════════ */
+
+.cve-table-wrap {
+    width: 100%;
+    overflow-x: auto;
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 1.5rem;
-    background: var(--bg-alt);
-    transition: all 0.3s ease;
 }
 
-.cve-card:hover {
-    border-color: var(--accent);
-}
-
-.cve-id {
+.cve-table {
+    width: 100%;
+    border-collapse: collapse;
     font-family: var(--font-mono);
-    font-size: 1.25rem;
-    color: var(--accent);
-    font-weight: 600;
-    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-light);
 }
 
-.cve-severity {
-    display: inline-block;
-    padding: 0.35rem 0.875rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.8rem;
+.cve-table thead th {
+    text-align: left;
+    padding: 0.6rem 0.85rem;
+    color: var(--text-muted);
     font-weight: 600;
+    font-size: 0.7rem;
     text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+.cve-table tbody td {
+    padding: 0.55rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.cve-table__row:hover {
+    background: var(--accent-soft);
+}
+
+.cve-table__id {
+    color: var(--text);
+    font-weight: 600;
+    white-space: nowrap;
+    width: 1%;
+}
+.cve-table__id a {
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--text-muted);
+    transition: color 80ms ease, border-bottom-color 80ms ease;
+}
+.cve-table__id a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.cve-table__score {
+    width: 1%;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.cve-score {
+    display: inline-block;
+    min-width: 2.4em;
+    padding: 0.15rem 0.45rem;
+    text-align: center;
+    border-radius: 2px;
     font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    border: 1px solid transparent;
+}
+.cve-score--critical { color: #f5b8b8; background: rgba(216, 122, 122, 0.18); border-color: rgba(216, 122, 122, 0.40); }
+.cve-score--high     { color: #ecc59a; background: rgba(212, 165, 116, 0.18); border-color: rgba(212, 165, 116, 0.40); }
+.cve-score--medium   { color: var(--accent); background: var(--accent-soft); border-color: rgba(212, 165, 116, 0.25); }
+.cve-score--low      { color: #b3c9a8; background: rgba(127, 191, 127, 0.12); border-color: rgba(127, 191, 127, 0.30); }
+.cve-score--none     { color: var(--text-muted); background: transparent; }
+
+.cve-table__product {
+    color: var(--text-light);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 0; /* combined with table-layout below for ellipsis to kick in */
+    white-space: nowrap;
 }
 
-.cve-severity.critical {
-    background: #7f1d1d;
-    color: #fca5a5;
+.cve-table__date {
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    width: 1%;
 }
 
-.cve-severity.high {
-    background: #7c2d12;
-    color: #fdba74;
-}
-
-.cve-severity.medium {
-    background: #78350f;
-    color: #fcd34d;
-}
-
-.cve-severity.low {
-    background: #14532d;
-    color: #86efac;
+@media (max-width: 600px) {
+    /* Drop the product column on narrow screens — date and score are
+       the most useful at-a-glance info. */
+    .cve-table thead th:nth-child(3),
+    .cve-table tbody td:nth-child(3) { display: none; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1992,11 +2045,6 @@ footer {
     }
 
     .certification-card {
-        padding: 1.5rem;
-    }
-
-    /* CVE */
-    .cve-card {
         padding: 1.5rem;
     }
 
