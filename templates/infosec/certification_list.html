@@ -12,13 +12,24 @@
         <p class="message-wrapper">{% trans 'No certifications listed yet.' %}</p>
         {% else %}
         {% for cert in certifications %}
-        <div class="certification-card">
-            {% if cert.picture %}<img src="{{ cert.picture.url }}" alt="{{ cert.name }}">{% endif %}
-            <h3>{{ cert.name }}</h3>
-            <p>{{ cert.issuer.name }}</p>
-            <p>{{ cert.description }}</p>
-            {% if cert.obtained_date %}<p style="color: var(--accent); font-size: 0.8rem;">{{ cert.obtained_date|date:"M Y" }}</p>{% endif %}
-        </div>
+        <details class="certification-card">
+            <summary>
+                <div class="certification-card__logo {% if not cert.picture %}certification-card__logo--empty{% endif %}">
+                    {% if cert.picture %}
+                    <img src="{{ cert.picture.url }}" alt="{{ cert.name }}" loading="lazy">
+                    {% else %}
+                    <span>{{ cert.name|slice:":2"|upper }}</span>
+                    {% endif %}
+                </div>
+                <div class="certification-card__title">
+                    <h3>{{ cert.name }}</h3>
+                    <span class="certification-card__issuer">{{ cert.issuer.name }}</span>
+                    {% if cert.obtained_date %}<span class="certification-card__date">{{ cert.obtained_date|date:"M Y" }}</span>{% endif %}
+                </div>
+                <span class="certification-card__chevron" aria-hidden="true">+</span>
+            </summary>
+            {% if cert.description %}<p class="certification-card__desc">{{ cert.description }}</p>{% endif %}
+        </details>
         {% endfor %}
         {% endif %}
     </div>
