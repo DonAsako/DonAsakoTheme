@@ -28,7 +28,15 @@
                 </div>
                 <span class="certification-card__chevron" aria-hidden="true">+</span>
             </summary>
-            {% if cert.description %}<p class="certification-card__desc">{{ cert.description }}</p>{% endif %}
+            <div class="certification-card__body">
+                {% if cert.description %}<p class="certification-card__desc">{{ cert.description }}</p>{% endif %}
+                {% if cert.article %}
+                <a class="certification-card__link" href="{% url 'blog:article_detail' cert.article.category.slug cert.article.slug %}">
+                    <span>{% trans 'Read related article' %}</span>
+                    <span class="certification-card__link-arrow" aria-hidden="true">→</span>
+                </a>
+                {% endif %}
+            </div>
         </details>
         {% endfor %}
         {% endif %}
