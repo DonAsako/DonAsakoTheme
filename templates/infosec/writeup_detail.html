@@ -56,6 +56,12 @@
                     <strong>{% trans 'Published' %}:</strong>
                     <span>{{ writeup.published_on|date:"Y-m-d" }}</span>
                 </div>
+                {% if writeup.authors.all %}
+                <div class="article-meta-item">
+                    <strong>{% trans 'Authors' %}:</strong>
+                    <span>{% for author in writeup.authors.all %}{{ author.get_full_name|default:author.username }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                </div>
+                {% endif %}
                 {% if writeup.edited_on != writeup.published_on %}
                 <div class="article-meta-item">
                     <strong>{% trans 'Updated' %}:</strong>
