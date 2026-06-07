@@ -9,8 +9,16 @@
     <div class="projects">
         {% for member in members %}
         <div class="project-card">
-            <h3>{{ member.user.username }}</h3>
-            {% if member.bio %}<p>{{ member.bio }}</p>{% endif %}
+            <h3>{{ member.get_full_name|default:member.username }}</h3>
+            {% if member.profile.role %}<p class="member-role">{{ member.profile.role }}</p>{% endif %}
+            {% if member.profile.bio %}<p>{{ member.profile.bio }}</p>{% endif %}
+            {% if member.profile.website or member.profile.github or member.profile.twitter %}
+            <div class="member-links">
+                {% if member.profile.website %}<a href="{{ member.profile.website }}" target="_blank" rel="noopener">{% trans 'Website' %}</a>{% endif %}
+                {% if member.profile.github %}<a href="{{ member.profile.github }}" target="_blank" rel="noopener">GitHub</a>{% endif %}
+                {% if member.profile.twitter %}<a href="{{ member.profile.twitter }}" target="_blank" rel="noopener">Twitter</a>{% endif %}
+            </div>
+            {% endif %}
         </div>
         {% empty %}
         <p class="message-wrapper">{% trans 'No members yet.' %}</p>
