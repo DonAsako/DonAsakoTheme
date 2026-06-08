@@ -26,7 +26,7 @@
         <a class="module-item" href="{% url 'education:lesson_list' course.slug module.slug %}">
             <div class="module-item-header">
                 <h3>{{ module.title }}</h3>
-                <span class="module-order">#{% if module.order %}{{ module.order }}{% else %}{{ forloop.counter }}{% endif %}</span>
+                <span class="module-order">#{{ forloop.counter }}</span>
             </div>
             {% if module.description %}
             <p>{{ module.description }}</p>

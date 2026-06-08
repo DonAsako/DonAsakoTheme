@@ -16,7 +16,7 @@
         <p>{{ module.description }}</p>
         {% endif %}
         <div class="page-meta">
-            <span>{% trans 'Module' %} #{% if module.order %}{{ module.order }}{% else %}1{% endif %}</span>
+            <span>{% trans 'Module' %} #{{ module.position }}</span>
             <span>{{ lessons.count }} {% trans 'lessons' %}</span>
             <span class="lessons-progress" id="lessonsProgress"></span>
         </div>
@@ -28,7 +28,7 @@
         {% for lesson in lessons %}
         <a class="lesson-item" href="{% url 'education:lesson_detail' course.slug module.slug lesson.slug %}"
             data-lesson-id="{{ lesson.slug }}">
-            <span class="lesson-order">{% if lesson.order %}{{ lesson.order }}{% else %}{{ forloop.counter }}{% endif%}</span>
+            <span class="lesson-order">{{ forloop.counter }}</span>
             <div class="lesson-item-content">
                 <h4>{{ lesson.get_translation.title }}</h4>
                 {% if lesson.get_translation.description %}
